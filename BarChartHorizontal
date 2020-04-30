@@ -1,0 +1,67 @@
+# -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+data = pd.read_csv("Tennis.csv")
+
+X_AXIS = "Titles"
+Y_AXIS = "Player"
+
+X_LABEL = "indeks"
+Y_LABEL = "klubovi"
+
+TITLE = "Naslov"
+SUPTITLE = "Podnaslov"
+
+COLOR_1 = "#aaaaaa"
+COLOR_2 = "#777777"
+COLOR_3 = "#333333"
+
+TEXT_SIZE = 24
+TICK_SIZE = 20
+TITLE_SIZE = 50
+
+fig, ax = plt.subplots(figsize=(16, 10), facecolor="white")
+
+plt.rcParams.update({'font.family': 'serif', 'font.serif': 'Ubuntu', 'font.monospace': 'Ubuntu Mono'})
+
+y_pos = np.arange(len(data[Y_AXIS]))
+performance = data[X_AXIS]
+
+ax.barh(y_pos, performance, align='center', color=COLOR_2) #width=0.5, 
+
+ax.set_xlim(0, 60)
+ax.set_xlabel(X_LABEL, color=COLOR_1, fontsize=TEXT_SIZE, weight="light")
+ax.set_yticks(y_pos)
+ax.set_yticklabels(data[Y_AXIS], x=-0.02)
+ax.tick_params(axis='both', colors=COLOR_2, length=0, labelsize=TICK_SIZE)
+ax.xaxis.grid(False)
+ax.yaxis.grid(False)
+ax.xaxis.set_label_coords(0.5, -0.10)
+
+ax.set_title(TITLE, fontsize=TITLE_SIZE, y=1.08, x=0.425, color=COLOR_3, weight='bold')
+plt.suptitle(SUPTITLE, fontsize=TEXT_SIZE, y=0.89, x=0.50, color=COLOR_2, weight="light")
+
+ax.invert_yaxis()  # labels read top-to-bottom
+
+if True:
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    
+# ISPISIVANJE TEKSTA IZNAD STUPACA
+if False:
+    for rect, label in zip(ax.patches, data[X_AXIS]):
+        height = rect.get_height()
+        ax.text(rect.get_y() + rect.get_width() / 2.0, height, label,  #va='center', ha='center',
+                fontsize=TEXT_SIZE, color=COLOR_2)
+
+plt.subplots_adjust(left=0.20, right=0.90, top=0.84, bottom=0.14, hspace=0.2, wspace=0.2)
+
+if False:
+    plt.savefig('Pic.png', transparent=True)
+
+
+plt.show()
