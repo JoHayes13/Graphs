@@ -1,0 +1,67 @@
+# -*- coding: utf-8 -*-
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = pd.read_csv("Refs.csv")
+
+data.sort_values(by=['RC'], inplace=True)
+
+X_AXIS = "Nation"
+Y_AXIS = ["RC"]
+
+X_LABEL = "X-label"
+Y_LABEL = "Y-label"
+
+TITLE = "title"
+SUPTITLE = "XXX"
+
+COLOR_1 = "#aaaaaa"
+COLOR_2 = "#777777"
+COLOR_3 = "#333333"
+
+TEXT_SIZE = 24
+TICK_SIZE = 20
+TITLE_SIZE = 50
+
+fig, ax = plt.subplots(figsize=(16, 10), facecolor="white")
+
+plt.rcParams.update({'font.family': 'serif', 'font.serif': 'Ubuntu', 'font.monospace': 'Ubuntu Mono'})
+
+data.plot(ax=ax, x=X_AXIS, y=Y_AXIS, kind="bar", color=['#2b8cbe', '#e34a33'])
+
+ax.set_ylim()
+ax.set_xlabel(X_LABEL, color=COLOR_1, fontsize=TEXT_SIZE, weight="light")
+ax.set_ylabel(Y_LABEL, color=COLOR_1, fontsize=TEXT_SIZE, weight="light")
+ax.tick_params(axis='both', colors=COLOR_2, length=0, labelsize=TICK_SIZE)
+ax.xaxis.grid(False)
+ax.yaxis.grid(False)
+ax.xaxis.set_label_coords(0.5, -0.10)
+ax.yaxis.set_label_coords(-0.05, 0.5)
+ax.invert_xaxis()
+
+ax.set_title(TITLE, fontsize=TITLE_SIZE, weight="bold", color=COLOR_3, y=1.08, x=0.485)
+plt.suptitle(SUPTITLE, fontsize=TEXT_SIZE, y=0.86, color=COLOR_2, weight='light')
+
+if True:
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+
+# ZA ISPIS IMENA NA X-OSI
+if True:
+    ax.set_xticklabels(data[X_AXIS], rotation=90, color=COLOR_2, ha="center", fontsize=TICK_SIZE)
+
+# ISPISIVANJE TEKSTA IZNAD STUPACA
+if False:
+    for rect, label in zip(ax.patches, data[Y_AXIS]):
+        height = rect.get_height()
+        ax.text(rect.get_x() + rect.get_width() / 2.0, height, label, ha='center', va='bottom',
+                fontsize=TEXT_SIZE, color=COLOR_2)
+
+plt.subplots_adjust(left=0.12, right=0.90, top=0.82, bottom=0.18, hspace=0.45, wspace=0.2)
+
+if False:
+    plt.savefig('RC.png', transparent=True)
+
+plt.show()
