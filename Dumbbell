@@ -1,0 +1,93 @@
+# -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
+from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
+from matplotlib.cbook import get_sample_data
+import matplotlib.patches as mpatches
+import pandas as pd
+
+data = pd.read_csv("Pad.csv")
+
+N = len(data)  # broj elemenata
+
+ELEMENTS = "stat"
+LAST_VALUE = "lani"
+NEW_VALUE = "sad"
+
+X_LABEL = "Tribina indeks"
+Y_LABEL = ""
+
+TITLE = "Naslov"
+SUPTITLE = "Podnaslov"
+
+COLOR_2 = "#777777"
+COLOR_3 = "#333333"
+LINE_COLOR = "#555555"
+A_COLOR = "#b30000"
+B_COLOR = "#238b45"
+
+MARKER_SIZE = 30
+MARKER_TEXT = 12
+TEXT_SIZE = 20
+TITLE_SIZE = 50
+
+fig, ax = plt.subplots(figsize=(16, 10), facecolor="white")
+
+plt.rcParams.update({'font.family': 'serif', 'font.serif': 'Ubuntu', 'font.monospace': 'Ubuntu Mono'})
+
+axis_labels = data[ELEMENTS]
+
+a = data[LAST_VALUE]
+b = data[NEW_VALUE]
+
+dumbbell_style_a = dict(color=A_COLOR, marker='o', markersize=MARKER_SIZE)
+dumbbell_style_b = dict(color=B_COLOR, marker='o', markersize=MARKER_SIZE)
+line_style = dict(color=LINE_COLOR, linestyle='-', linewidth=2)
+
+axis_label_style = dict(ha='right', va='center', fontsize=TEXT_SIZE)
+data_label_style = dict(ha='center', va='center', color='white',
+                        weight='bold', fontsize=MARKER_TEXT)
+
+index = list(range(N))
+    # Loop N times
+for i in index:
+    ax.plot([a[i], b[i]], [i, i], **line_style)   # Plot the line between dumbbells
+    ax.plot(a[i], i, **dumbbell_style_a)   # Plot the dumbbells.
+    ax.plot(b[i], i, **dumbbell_style_b)
+    ax.text(a[i], i, a[i], **data_label_style)   # Add data label on top of dumbbells
+    ax.text(b[i], i, b[i], **data_label_style)
+    ax.text(0 - 0.3, i, axis_labels[i], **axis_label_style)   # Add the axis label
+
+# fig.subplots_adjust(left=0.3)
+plt.xlim(-50.1, 50.1)
+#plt.ylim(-1, N)
+ax.grid(color='#000000', linestyle='-', linewidth=1, alpha=0.1)
+ax.get_yaxis().set_ticks([])
+ax.tick_params(axis='both', colors=COLOR_2, length=0, labelsize=TEXT_SIZE)
+# ax.set_facecolor("#f0f0f0")
+# ax.get_xaxis().set_ticks([60, 62, 64, 66, 68, 70])
+# ax.set_axis_off()
+
+ax.set_xlabel(X_LABEL, color=COLOR_2, fontsize=TEXT_SIZE, weight='light')
+ax.set_ylabel(Y_LABEL, color=COLOR_2, fontsize=TEXT_SIZE, weight='light')
+plt.title(TITLE, weight="bold", fontsize=TITLE_SIZE, y=1.1, x=0.42, color=COLOR_3)
+plt.suptitle(SUPTITLE, fontsize=MARKER_SIZE, y=0.88, color=COLOR_2, weight='light')
+
+if True:
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+
+ax.invert_yaxis()
+
+if True:
+    first = mpatches.Patch(color=A_COLOR, alpha=0.8, label='2017./2018.')
+    second = mpatches.Patch(color=B_COLOR, alpha=0.8, label='2018./2019.')
+    ax.legend(handles=[first, second], loc="lower right", fontsize=TEXT_SIZE)
+
+plt.subplots_adjust(left=0.20, right=0.90, top=0.82, bottom=0.2, hspace=0.2, wspace=0.2)
+
+if True:
+    plt.savefig('Pad.png', transparent=True)
+
+plt.show()
