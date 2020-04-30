@@ -1,0 +1,93 @@
+# -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
+import pandas as pd
+import matplotlib.patches as mpatches
+
+data = pd.read_csv("DATA/Theil.csv")
+
+ELEMENT = "club"
+X_AXIS = "Year"
+Y_AXIS = "Value"
+
+X_LABEL = "sezona"
+Y_LABEL = "Modificirani Theil T indeks"
+
+LEAGUE = "Theil"
+
+TITLE = LEAGUE
+SUPTITLE = "Podnaslov"
+
+COLOR_1 = "#aaaaaa"
+COLOR_2 = "#777777"
+COLOR_3 = "#333333"
+color_key = '#80b1d3'
+color_other = '#fb8072'
+
+TEXT_SIZE = 24
+TICK_SIZE = 20
+TITLE_SIZE = 50
+
+key_data = data.loc[data[ELEMENT] == LEAGUE]
+"""
+other_data = data.loc[data[ELEMENT] == 'dribble']
+other_data2 = data.loc[data[ELEMENT] == 'lost']
+"""
+
+fig, ax = plt.subplots(figsize=(16, 10), facecolor="white")
+
+plt.rcParams.update({'font.family': 'serif', 'font.serif': 'Ubuntu', 'font.monospace': 'Ubuntu Mono'})
+
+labels = []
+
+for key, grp in key_data.groupby([ELEMENT]):
+    grp.plot(ax=ax, kind="line", x=X_AXIS, y=Y_AXIS,
+             color=COLOR_1, lw=2, alpha=1)
+    labels.append(key)
+
+"""
+for key, grp in other_data.groupby([ELEMENT]):
+    grp.plot(ax=ax, kind="line", x=X_AXIS, y=Y_AXIS,
+             color=color_other, lw=5, alpha=1)
+    labels.append(key)
+    
+for key, grp in other_data2.groupby([ELEMENT]):
+    grp.plot(ax=ax, kind="line", x=X_AXIS, y=Y_AXIS,
+             color=COLOR_3, lw=5, alpha=1)
+    labels.append(key)
+"""
+
+ax.set_xlim(1999.8, 2019.2)
+ax.set_ylim(0.35, 1.2)
+ax.set_xlabel(X_LABEL, color=COLOR_1, fontsize=TEXT_SIZE, weight="light")
+ax.set_ylabel(Y_LABEL, color=COLOR_1, fontsize=TEXT_SIZE, weight="light")
+ax.tick_params(axis='both', colors=COLOR_2, length=0, labelsize=TICK_SIZE)
+ax.xaxis.grid(False)
+ax.yaxis.grid(False)#, alpha=0.3)
+ax.xaxis.set_label_coords(0.5, -0.07)
+ax.yaxis.set_label_coords(-0.07, 0.5)
+
+ax.set_title(TITLE, fontsize=TITLE_SIZE, y=1.07, x=0.53, weight="bold", color=COLOR_3)
+plt.suptitle(SUPTITLE, fontsize=TEXT_SIZE, y=0.87, color=COLOR_2, weight="light")
+
+lines, _ = ax.get_legend_handles_labels()
+ax.legend(lines, labels, loc="best", fontsize="small")
+ax.legend_.remove()
+
+#ax.text(2015.2, 150, "MLS", fontsize=40, color=color_key, va="center", weight="bold")
+#ax.text(2015.2, 260, "NWSL", fontsize=40, color=color_other, va="center", weight="bold")
+
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+
+if False:
+    ax.annotate('ANNOTATION MESSAGE', xy=(2014, 38), xytext=(2013, 6), color=COLOR_2, fontsize=TICK_SIZE, 
+                arrowprops=dict(arrowstyle='->', color='#555555', lw=2, connectionstyle="angle3,angleA=0,angleB=-90"))
+
+plt.subplots_adjust(left=0.10, right=0.85, top=0.83, bottom=0.10, hspace=0.2, wspace=0.2)
+
+if True:
+    plt.savefig("PNG/" + LEAGUE + '.png', transparent=True)
+
+plt.show()
