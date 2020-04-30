@@ -1,0 +1,70 @@
+# -*- coding: utf-8 -*-
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+raw_data = pd.read_csv("Refs.csv")
+
+ELEMENT = "Player"
+FILTER = "position"
+Y_VALUE = "Tackle_w"
+
+PLAYER_NAME = "Lúcio"
+PLAYER_POSITION = "CB"
+
+X_LABEL = ""
+Y_LABEL = ""
+
+TITLE = "Naslov"
+SUPTITLE = "Podnaslov"
+
+COLOR_1 = "#aaaaaa"
+COLOR_2 = "#777777"
+COLOR_3 = "#333333"
+COLOR_KEY = "#b30000"
+COLOR_TEAM = "#0570b0"
+COLOR_OTHER = "#cccccc"
+
+TEXT_SIZE = 24
+TICK_SIZE = 20
+TITLE_SIZE = 50
+
+data = raw_data.loc[(raw_data.Apps > 15) & (raw_data[FILTER] == PLAYER_POSITION)]
+
+key = data.loc[data[ELEMENT] == PLAYER_NAME]
+team = data.loc[(data[FILTER] == PLAYER_POSITION) & (data[ELEMENT] != PLAYER_NAME)]
+others = data.loc[data[FILTER] != PLAYER_POSITION]
+
+fig, ax = plt.subplots(figsize=(16, 9), facecolor="white")
+
+plt.rcParams.update({'font.family': 'serif', 'font.serif': 'Ubuntu', 'font.monospace': 'Ubuntu Mono'})
+
+ax = sns.stripplot(y=Y_VALUE, data=others, dodge=True, jitter=.1, alpha=0.3, color=COLOR_OTHER, size=10)
+ax = sns.stripplot(y=Y_VALUE, data=team, dodge=True, jitter=.1, alpha=0.5, color=COLOR_TEAM, size=10)
+ax = sns.stripplot(y=Y_VALUE, data=key, dodge=True, jitter=.0, alpha=0.9, color=COLOR_KEY, size=20)
+
+ax.set_ylim(0, 5)
+ax.set_xlabel(X_LABEL, color=COLOR_1, fontsize=TEXT_SIZE)
+ax.set_ylabel(Y_LABEL, color=COLOR_1, fontsize=TEXT_SIZE)
+ax.tick_params(axis='both', colors=COLOR_2, length=0, labelsize=TICK_SIZE)
+ax.xaxis.grid(False)
+ax.yaxis.grid(False)
+ax.xaxis.set_label_coords(0.5, -0.06)
+ax.yaxis.set_label_coords(-0.05, 0.5)
+
+ax.set_title(TITLE, fontsize=TITLE_SIZE, y=1.08, x=0.49, weight="bold", color=COLOR_3)
+plt.suptitle(SUPTITLE, fontsize=TEXT_SIZE, y=0.86, color=COLOR_2, weight="light")
+
+if True:
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+
+plt.subplots_adjust(left=0.10, right=0.92, top=0.82, bottom=0.10, hspace=0.2, wspace=0.2)
+
+if False:
+    plt.savefig('img.png', transparent=True)
+
+
+plt.show()
